@@ -2,8 +2,8 @@
 
 A Manifest V3 extension for **Brave on desktop**. Protect your attention with two website lists:
 
-- **Always blocked:** navigation is replaced with a local blocked page and a randomly selected Lord of the Rings book quote. There is no continue button.
-- **Pause before entering:** a local page waits 30 seconds before enabling **Continue with intention**. Navigation requires a click; the page never proceeds automatically.
+- **Always blocked:** navigation is replaced with a local blocked page and a randomly selected Lord of the Rings book or film quote. There is no continue button.
+- **Pause before entering:** a local page waits 30 seconds by default (configurable in settings using whole seconds) before enabling **Continue with intention**. Navigation requires a click; the page never proceeds automatically.
 
 Approval applies to that domain and its subdomains in that tab until you navigate away. A different tab needs its own pause. Reloading the pause page preserves the original deadline. Closing the tab, restarting Brave, or saving settings revokes approvals. Always-blocked domains take priority over approvals, including more specific subdomains.
 
@@ -13,7 +13,7 @@ Approval applies to that domain and its subdomains in that tab until you navigat
 2. Enable **Developer mode**.
 3. Click **Load unpacked** and select this repository's **extension** folder.
 4. Open the extension's toolbar popup and click **Manage my websites** (pin it using Brave's extensions menu if useful).
-5. Enter one domain per line in either list, then click **Save my paths**.
+5. Enter one domain per line in either list, set the pause duration in seconds (default 30, minimum 1), then click **Save my paths**.
 6. Open a configured website to try it.
 
 Use `reddit.com`, for example. This also covers `www.reddit.com` and other subdomains, but not `notreddit.com`. Full HTTP/HTTPS URLs with only a trailing slash are accepted and normalized. Paths, query strings, ports, credentials, and wildcards are rejected. International domain names are supported. Lists start empty; the combined limit is 500 domains.
@@ -48,7 +48,7 @@ Formatting uses pinned Prettier 3.6.2 through `npx`; it requires registry access
 
 ## Privacy and behavior
 
-Settings use `chrome.storage.local`. Temporary deadlines and approvals use `chrome.storage.session`. There are no analytics, accounts, cloud sync, external fonts, or runtime quote requests. The two short book quotations, chapter attributions, and verification sources are bundled in `extension/quotes.js`. They are from *The Fellowship of the Ring*, Book I: Gandalf in Chapter 2, ‘The Shadow of the Past’, and Bilbo’s poem in Chapter 10, ‘Strider’. Sources: [Gandalf’s dialogue](https://www.sparknotes.com/lit/fellowship/quotes/) and [The Riddle of Strider](https://tolkiengateway.net/wiki/Riddle_of_Strider). No movie-only quotations are included. This is an unofficial fan project.
+Settings use `chrome.storage.local`. Temporary deadlines and approvals use `chrome.storage.session`. There are no analytics, accounts, cloud sync, external fonts, or runtime quote requests. Book and film quotations, attributions, and verification sources are bundled in `extension/quotes.js`, including Sam’s shadow speech from the 2002 film _The Two Towers_ and excerpts from Gandalf’s steward speech in _The Return of the King_. This is an unofficial fan project.
 
 HTTP/HTTPS host access and `declarativeNetRequest` allow the browser to redirect configured top-level requests before loading them. `storage` saves settings and temporary tab state; `webNavigation` revokes approval after leaving a site. No content script reads pages. Quote selection and rendering happen entirely locally. **Choose another path** opens Brave Search only after you click it.
 
@@ -61,7 +61,7 @@ Implementation references: [Chrome declarativeNetRequest](https://developer.chro
 The automated tests mock browser APIs. Before publishing, check in desktop Brave:
 
 1. Block `example.com`, visit it and a subdomain, and confirm a quote appears with no Continue action. Unrelated domains should work.
-2. Put `example.org` on cooldown. Confirm Continue stays disabled for 30 seconds, no automatic navigation occurs, and a click returns to the original path/query.
+2. Put `example.org` on cooldown. Confirm the default pause is 30 seconds. Change it to 5 seconds, save, reopen settings to confirm it persists, and visit the site again. Confirm Continue stays disabled for the configured duration, no automatic navigation occurs, and a click returns to the original path/query.
 3. Reload during the pause; confirm the deadline persists. Try a second tab; it needs a separate wait.
 4. After approval, follow another page on that domain, then leave for another site and revisit. A new pause should start.
 5. Add a blocked subdomain of a cooldown domain. Even with an approval for the parent, the subdomain must remain blocked.

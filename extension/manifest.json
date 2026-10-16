@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "One Block to Rule Them All",
+  "version": "1.0.1",
+  "description": "Guard your attention with blocked sites, a conscious 30-second pause, and wisdom from Middle-earth.",
+  "minimum_chrome_version": "120",
+  "permissions": ["storage", "declarativeNetRequest", "webNavigation"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": { "default_title": "Manage your paths", "default_popup": "popup.html" },
+  "options_page": "options.html",
+  "web_accessible_resources": [{ "resources": ["gate.html"], "matches": ["http://*/*", "https://*/*"] }]
+}
